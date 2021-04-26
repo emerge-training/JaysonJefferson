@@ -67,7 +67,7 @@ func initializeWidget override
 		task.setName(name.getWidgetText())
 		task.setDescription(description.getWidgetText())
 		
-		APIClient.getInstance().addRiderregistration(rider.toDynamicMap(), func(res as DynamicMap){
+		APIClient.getInstance().addTask(task.toDynamicMap(), func(res as DynamicMap){
 			context.showMessageDialog("Notice", "Successfully Add Tasklist")
 			id.setWidgetText("")
 			name.setWidgetText("")
@@ -89,7 +89,7 @@ func initializeWidget override
 	backbtn.setWidgetBackgroundColor(Color.instance("#B6CAE3"))
 	backbtn.setWidgetTextColor(Color.white())
 	backbtn.setWidgetFontSize(context.getHeightValue("4mm"))
-    
+
 	vbox.addWidget(addbtn)
 	vbox.addWidget(backbtn)
 	
