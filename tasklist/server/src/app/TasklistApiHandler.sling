@@ -5,8 +5,11 @@ class is HTTPRPCRouter #webapi2:
 
 model TaskRequest
 {
+    id as string
     name as string
     description as string
+    timeStampAdded as long
+    timeStampLastUpdated as long
 }
 
 var db as TasklistDatabase
@@ -25,7 +28,7 @@ func postProcess(req as HTTPWorkerRequest, resp as HTTPWorkerResponse) override:
 cors.handleWorkerRequest(req, resp)
 
 
-GET "/task"
+GET "/tasks"
 {
     var tasks = assert getDatabase().getTasks()
     sendOk tasks
