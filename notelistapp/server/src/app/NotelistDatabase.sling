@@ -15,12 +15,12 @@ model Note
     timeStampLastUpdated as long
 }
 
-const TABLE = "notes"
+const NOTELIST = "note"
 pvar db as MySQLDatabase
 
 func forContext(ctx as LoggingContext) static as this
 {
-    var cstr = EnvironmentVariable.get("NOTES_DATABASE")
+    var cstr = EnvironmentVariable.get("NOTE_DATABASE")
     Log.debug(ctx, "Opening database connection: '" .. cstr .. "'")
     db = MySQLDatabase.forConnectionStringSync(ctx, cstr)
     if not db:
@@ -42,41 +42,41 @@ func updateTable(table as SQLTableInfo)
 
 func updateTables
 {
-    var tbl = SQLTableInfo.forName(TABLE)
+    var tbl = SQLTableInfo.forName(NOTELIST)
     tbl.addStringKeyColumn("id")
     tbl.addStringColumn("note")
     updateTable(tbl)
 }
 
-func addValue(tbl as Note) as Note
+func addNote(tbl as Note) as Note
 {
     assert tbl
     tbl.setId("1")
     tbl.setTimeStampAddedValue(SystemClock.asUTCSeconds())
-    assert db.executeSync(db.prepareInsertStatementSync(TABLE, tbl.toDynamicMap()))
+    assert db.executeSync(db.prepareInsertStatementSync(NOTELIST, tbl.toDynamicMap()))
     return tbl
 }
 
-func updateValue(id as string, tbl as Note) as bool
+func updateNote(id as string, tbl as Note) as bool
 {
     assert tbl
     tbl.setTimeStampLastUpdatedValue(SystemClock.asUTCSeconds())
     var criteria = new Note()
     criteria.setId(id)
-    return db.executeSync(db.prepareUpdateStatementSync(TABLE, criteria.toDynamicMap(), tbl.toDynamicMap()))
+    return db.executeSync(db.prepareUpdateStatementSync(NOTELIST, criteria.toDynamicMap(), tbl.toDynamicMap()))
 }
 
-func deleteValue(id as string) as bool
+func deleteNote(id as string) as bool
 {
     var criteria = new Note()
     criteria.setId(id)
-    return db.executeSync(db.prepareDeleteStatementSync(TABLE, criteria.toDynamicMap()))
+    return db.executeSync(db.prepareDeleteStatementSync(NOTELIST, criteria.toDynamicMap()))
 }
 
-func getValues as DynamicMap
+func getNotes as DynamicMap
 {
     var v = new vector<Note>
-    var it = assert db.querySync(db.prepareQueryAllStatementSync(TABLE))
+    var it = assert db.querySync(db.prepareQueryAllStatementSync(NOTELIST))
         return null
     while it{
         var o = it.next()

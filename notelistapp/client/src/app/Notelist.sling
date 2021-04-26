@@ -1,0 +1,20 @@
+import jk.widget.common
+
+class is TitledWidget #widget:
+
+ui LayerWidget
+{
+    VerticalScrollerWidget{
+        scrollBarDisabled = true
+        LayerWithBackgroundColorWidget container{
+            color = Color.white()
+            VerticalBoxWidget list {
+                margin = context.getHeightValue("5mm")
+                spacing = context.getHeightValue("5mm")
+            }
+        }
+    }
+}
+
+func getWidgetTitle as string:
+return "Notelist App"
