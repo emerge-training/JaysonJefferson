@@ -8,8 +8,6 @@ model TaskRequest
     id as string
     name as string
     description as string
-    timeStampAdded as long
-    timeStampLastUpdated as long
 }
 
 var db as TasklistDatabase
@@ -39,6 +37,7 @@ POST "/task"
     var requestData = assert TaskRequest.forJsonString(req.getBodyString()):
         sendError "invalidRequest"
     var task = new TasklistDatabase.Task()
+    task.setId(requestData.getId())
     task.setName(requestData.getName())
     task.setDescription(requestData.getDescription())
     assert getDatabase().addTask(task):

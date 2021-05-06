@@ -1,3 +1,5 @@
 /tasklist/server/.build/
 /tasklist/client/.build/
-helloworld/.build/
+/helloworld/.build/
+/notelistapp/server/.build/
+/notelistapp/client/.build/

@@ -7,21 +7,19 @@ import jk.time
 
 class:
 
-model Note
+model Task
 {
     id as string
     note as string
-    timeStampAdded as long
-    timeStampLastUpdated as long
 }
 
-const NOTELIST = "note"
+const NOTE = "note"
 pvar db as MySQLDatabase
 
 func forContext(ctx as LoggingContext) static as this
 {
     var cstr = EnvironmentVariable.get("NOTE_DATABASE")
-    Log.debug(ctx, "Opening database connection: '" .. cstr .. "'")
+    Log.debug(ctx, "Opening database connection: '" .. cstr .."'")
     db = MySQLDatabase.forConnectionStringSync(ctx, cstr)
     if not db:
         Error.throw("failedToConnectToDatabase", cstr)
@@ -33,7 +31,7 @@ func forContext(ctx as LoggingContext) static as this
 func updateTable(table as SQLTableInfo)
 {
     if not table:
-        Error.throw("nullTable","updateTable")
+        Error.throw("nullTable", "updateTable")
     if not db:
         Error.throw("nullDb", "updateTable")
     if not db.ensureTableExistsSync(table):
@@ -42,50 +40,32 @@ func updateTable(table as SQLTableInfo)
 
 func updateTables
 {
-    var tbl = SQLTableInfo.forName(NOTELIST)
-    tbl.addStringKeyColumn("id")
-    tbl.addStringColumn("note")
-    updateTable(tbl)
+    var note = SQLTableInfo.forName(NOTE)
+    note.addStringKeyColumn("id")
+    note.addStringColumn("name")
+    updateTable(note)
 }
 
-func addNote(tbl as Note) as Note
+func addNote(note as Note) as Note
 {
-    assert tbl
-    tbl.setId("1")
-    tbl.setTimeStampAddedValue(SystemClock.asUTCSeconds())
-    assert db.executeSync(db.prepareInsertStatementSync(NOTELIST, tbl.toDynamicMap()))
-    return tbl
-}
-
-func updateNote(id as string, tbl as Note) as bool
-{
-    assert tbl
-    tbl.setTimeStampLastUpdatedValue(SystemClock.asUTCSeconds())
-    var criteria = new Note()
-    criteria.setId(id)
-    return db.executeSync(db.prepareUpdateStatementSync(NOTELIST, criteria.toDynamicMap(), tbl.toDynamicMap()))
-}
-
-func deleteNote(id as string) as bool
-{
-    var criteria = new Note()
-    criteria.setId(id)
-    return db.executeSync(db.prepareDeleteStatementSync(NOTELIST, criteria.toDynamicMap()))
+    assert note
+    assert db.executeSync(db.prepareInsertStatementSync(NOTE, note.toDynamicMap()))
+    return note
 }
 
 func getNotes as DynamicMap
 {
     var v = new vector<Note>
-    var it = assert db.querySync(db.prepareQueryAllStatementSync(NOTELIST))
+    var it = assert db.querySync(db.prepareQueryAllStatementSync(NOTE)):
         return null
-    while it{
+    while it {
         var o = it.next()
         if not o:
             break
-        var tbl = Note.forJsonObject(o)
-        if not tbl:
+        var note = Note.forJsonObject(o)
+        if not note:
             continue
-        v += tbl
+        v += note
     }
     var data = new DynamicMap()
     data.setObject("records", v)

@@ -7,8 +7,6 @@ model NoteRequest
 {
     id as string
     note as string
-    timeStampAdded as long
-    timeStampLastUpdated as long
 }
 
 var db as NotelistDatabase
@@ -38,26 +36,9 @@ POST "/note"
     var requestData = assert NoteRequest.forJsonString(req.getBodyString()):
         sendError "invalidRequest"
     var note = new NotelistDatabase.Note()
+    note.setId(requestData.getId())
     note.setNote(requestData.getNote())
     assert getDatabase().addNote(note):
-        sendError "failed to save Notes"
-    sendOk
-}
-
-PUT "/note/:id"
-{
-    var requestData = assert NoteRequest.forJsonString(req.getBodyString()):
-        sendError "invalidRequest"
-    var note = new NotelistDatabase.Note()
-    note.setNote(requestData.getNote())
-    assert getDatabase().updateNote(vars.getString("id"), task):
-        sendError "failed To Update Notes"
-    sendOk
-}
-
-DELETE "/note/:id"
-{
-    assert getDatabase().deleteNote(vars.getString("id")):
-        sendError "failed To Delete Notes"
+        sendError "failedToSaveNote"
     sendOk
 }

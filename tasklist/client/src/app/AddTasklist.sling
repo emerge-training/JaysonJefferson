@@ -2,13 +2,11 @@ import jk.widget.common
 
 class #widget #main:
 
-model Riderregistration
+model Task
 {
 	id as string
     name as string
     description as string
-    timeStampAdded as long
-    timeStampLastUpdated as long
 
 }
 
@@ -38,14 +36,14 @@ ui LayerWidget
 				fontSize = context.getHeightValue("2mm")
 				padding = context.getHeightValue("2500um")
 			    }
-				TextInputWidget firstname {
+				TextInputWidget name {
 					type = TextInputWidget.TYPE_NAME
 					placeholder = "Name"
 					backgroundColor = Color.white()
 					fontSize = context.getHeightValue("2mm")
 					padding = context.getHeightValue("2500um")
 				}
-				TextInputWidget middlename {
+				TextInputWidget description {
 					type = TextInputWidget.TYPE_NAME
 					placeholder = "Description"
 					backgroundColor = Color.white()
@@ -62,12 +60,12 @@ func initializeWidget override
 
 	base.initializeWidget()
 	var addbtn = ButtonWidget.forText(context, "Add Tasklist", func{
-		var task = new Task()
-		task.setId(id.getWidgetText())
-		task.setName(name.getWidgetText())
-		task.setDescription(description.getWidgetText())
+		var add = new Task()
+		add.setId(id.getWidgetText())
+		add.setName(name.getWidgetText())
+		add.setDescription(description.getWidgetText())
 		
-		APIClient.getInstance().addTask(task.toDynamicMap(), func(res as DynamicMap){
+		APIClient.getInstance().addTask(add.toDynamicMap(), func(res as DynamicMap){
 			context.showMessageDialog("Notice", "Successfully Add Tasklist")
 			id.setWidgetText("")
 			name.setWidgetText("")
