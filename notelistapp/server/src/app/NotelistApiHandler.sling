@@ -25,20 +25,8 @@ func postProcess(req as HTTPWorkerRequest, resp as HTTPWorkerResponse) override:
 cors.handleWorkerRequest(req, resp)
 
 
-GET "/notes"
+GET "/note"
 {
-    var notes = assert getDatabase().getNotes()
-    sendOk notes
-}
-
-POST "/note"
-{
-    var requestData = assert NoteRequest.forJsonString(req.getBodyString()):
-        sendError "invalidRequest"
-    var note = new NotelistDatabase.Note()
-    note.setId(requestData.getId())
-    note.setNote(requestData.getNote())
-    assert getDatabase().addNote(note):
-        sendError "failedToSaveNote"
-    sendOk
+    var note = assert getDatabase().getNote()
+    sendOk note
 }

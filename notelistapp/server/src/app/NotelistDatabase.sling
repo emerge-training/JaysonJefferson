@@ -7,12 +7,11 @@ import jk.time
 
 class:
 
-model Task
+model Note
 {
     id as string
     note as string
 }
-
 const NOTE = "note"
 pvar db as MySQLDatabase
 
@@ -42,18 +41,12 @@ func updateTables
 {
     var note = SQLTableInfo.forName(NOTE)
     note.addStringKeyColumn("id")
-    note.addStringColumn("name")
+    note.addStringColumn("note")
     updateTable(note)
 }
 
-func addNote(note as Note) as Note
-{
-    assert note
-    assert db.executeSync(db.prepareInsertStatementSync(NOTE, note.toDynamicMap()))
-    return note
-}
 
-func getNotes as DynamicMap
+func getNote as DynamicMap
 {
     var v = new vector<Note>
     var it = assert db.querySync(db.prepareQueryAllStatementSync(NOTE)):

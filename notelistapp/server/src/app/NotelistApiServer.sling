@@ -15,7 +15,7 @@ func initializeServer(server as HTTPServer) override as bool
 func initializeApplication override as bool
 {
     assert base.initializeApplication()
-    var db = notelistDatabase.forContext(ctx)
+    var db = NotelistDatabase.forContext(ctx)
     db.updateTables()
     db.close()
     return true
