@@ -36,5 +36,8 @@ func onError(error as Error, callback as function<void,Error>) override
     widgetDefaultErrorHandler(error)
 }
 
+func addNote(data as DynamicMap, callback as function<void, DynamicMap>, errorCallback as function<void, Error>):
+    doPost("/note/", data, callback, errorCallback)
+
 func getNotes(callback as function<void, DynamicMap>, errorCallback as function<void, Error> = null):
     doGet("/note/", callback, errorCallback)

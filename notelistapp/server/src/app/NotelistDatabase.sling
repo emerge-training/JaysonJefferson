@@ -45,6 +45,12 @@ func updateTables
     updateTable(note)
 }
 
+func addNote(note as Note) as Note
+{
+    assert note
+    assert db.executeSync(db.prepareInsertStatementSync(NOTE, note.toDynamicMap()))
+    return note
+}
 
 func getNote as DynamicMap
 {

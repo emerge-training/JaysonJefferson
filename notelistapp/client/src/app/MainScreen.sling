@@ -12,5 +12,5 @@ func initialize override
     navi.setWidgetEnableActionBar(false)
     setWidget(navi)
     APIClient.create(context, navi)
-    navi.pushWidget(new Notelist(context))
+    navi.pushWidget(new Home(context))
 }

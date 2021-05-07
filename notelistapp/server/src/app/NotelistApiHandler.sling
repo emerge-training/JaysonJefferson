@@ -30,3 +30,15 @@ GET "/note"
     var note = assert getDatabase().getNote()
     sendOk note
 }
+
+POST "/note"
+{
+    var requestData = assert NoteRequest.forJsonString(req.getBodyString()):
+        sendError "invalidRequest"
+    var note = new NotelistDatabase.Note()
+    note.setId(requestData.getId())
+    note.setNote(requestData.getNote())
+    assert getDatabase().addNote(note):
+        sendError "failedToSaveNote"
+    sendOk
+}

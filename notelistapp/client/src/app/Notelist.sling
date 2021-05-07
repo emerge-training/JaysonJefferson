@@ -35,6 +35,16 @@ func initializeWidget override
             }
         }
     })
+
+    var backbtn = ButtonWidget.forText(context, "Back To Home", func{
+		NavigationWidget.switchToContainer(this, new Home(context))
+	})
+    
+	backbtn.setWidgetBackgroundColor(Color.instance("#B6CAE3"))
+	backbtn.setWidgetTextColor(Color.white())
+	backbtn.setWidgetFontSize(context.getHeightValue("4mm"))
+	list.addWidget(backbtn)
+
 }
 
 func getWidgetTitle as string:
